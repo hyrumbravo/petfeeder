@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "79610662614",
+    "firebase_url": "https://feed-e5361-default-rtdb.firebaseio.com",
+    "project_id": "feed-e5361",
+    "storage_bucket": "feed-e5361.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:79610662614:android:c6b75975bd4319246f4377",
+        "android_client_info": {
+          "package_name": "com.example.petfeeder"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDEkiIch13tTSpeJMOjfMCRQ5TTM3x2UPc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

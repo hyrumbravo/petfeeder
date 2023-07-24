@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/yellow_background"
+    tools:context=".Diet">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/diet_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/orange"
+        android:elevation="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="Feed"
+        app:titleTextColor="@color/white" />
+
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="185dp"
+        android:layout_height="137dp"
+        android:layout_marginTop="27dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/diet_toolbar"
+        tools:src="@drawable/tffi_logo" />
+
+    <EditText
+        android:id="@+id/date_pick"
+        android:layout_width="375dp"
+        android:layout_height="53dp"
+        android:layout_marginTop="48dp"
+        android:background="@drawable/box"
+        android:clickable="false"
+        android:cursorVisible="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:hint="@string/select_date"
+        android:textAlignment="gravity"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.444"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView4" />
+
+    <EditText
+        android:id="@+id/time_pick"
+        android:layout_width="375dp"
+        android:layout_height="53dp"
+        android:layout_marginTop="28dp"
+        android:hint="@string/select_time"
+        android:textAlignment="gravity"
+        android:clickable="false"
+        android:cursorVisible="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        app:layout_constraintEnd_toEndOf="@+id/date_pick"
+        app:layout_constraintStart_toStartOf="@+id/date_pick"
+        app:layout_constraintTop_toBottomOf="@+id/date_pick"
+        android:background="@drawable/box"/>
+
+    <RadioGroup
+        android:id="@+id/first"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:layout_marginStart="25dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/time_pick">
+
+        <RadioButton
+            android:id="@+id/lvl_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="uploadData"
+            android:text="@string/lvl1"
+            android:textSize="20sp" />
+
+        <RadioButton
+            android:id="@+id/lvl_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="uploadData"
+            android:text="@string/lvl2"
+            android:textSize="20sp" />
+
+        <RadioButton
+            android:id="@+id/lvl_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="uploadData"
+            android:text="@string/lvl3"
+            android:textSize="20sp" />
+        <RadioButton
+            android:id="@+id/lvl_4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/lvl4"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:onClick="uploadData"
+            app:layout_constraintTop_toBottomOf="@+id/time_pick" />
+        <RadioButton
+            android:id="@+id/lvl_5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="uploadData"
+            android:text="@string/lvl5"
+            android:textSize="20sp"/>
+        <RadioButton
+            android:id="@+id/lvl_6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="uploadData"
+            android:text="@string/lvl6"
+            android:textSize="20sp"/>
+    </RadioGroup>
+
+
+    <Button
+        android:id="@+id/upload"
+        android:layout_width="109dp"
+        android:layout_height="62dp"
+        android:layout_marginBottom="60dp"
+        android:text="@string/upload"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,101 @@
+<resources>
+    //MainActivity
+    <string name="app_name">Pet Feeder</string>
+    <string name="feed_and_find"><b>Feed and Find:</b>\nA pet monitoring system on\nembedded collar technology.</string>
+    <string name="todo">todo</string>
+
+    //DashBoard items
+    <string name="name_assigned">Name Goes Here</string>
+    <string name="pet_breed">Pet Breed Goes Here</string>
+
+    //About
+    <string name="about">ABOUT</string>
+    <string name="about_info">The Lumos team has developed a cutting-edge mobile application called the pet feeder, which is designed to schedule and automate the feeding of pets. Pet feeders are particularly useful for busy pet owners or those who travel frequently. Additionally, they can help regulate a pets eating habits, preventing overeating or under-eating. Ultimately, pet feeders are a valuable tool for pet owners who want to provide their furry companions with consistent access to food.</string>
+
+    //Credits
+    <string name="credits">CREDITS</string>
+    <string name="credits_info"><b>The Feed and Find Initiative Team</b>\nCheryl Marie Chomis Alimba\nHyrum Roi Sapurco Bravo\nJasper Daile Tuibeo Corpuz\nJohn Homer Sayno Dar\nAr-jay De La Fuente\nKirby Ann Aycardo De Los Reyes\nAngelo Millares Echano\nArriana Mae Vargas Malubay\nIvan Meir Pablo Morada\nRenze Meinard Mortiga\nWendee Davillo Postre\nChristine Magana Toral\nKai Lapak Yaneza\n\n<b>Team Lumos</b>\nAr-jay De La Fuente\nKirby Ann Aycardo De Los Reyes\nWendee Davillo Postre\nHyrum Roi Sapurco Bravo\nJasper Daile Tuibeo Corpuz\nJohn Homer Sayno Dar\n\n<b>Lead Wiring Team</b>\nAr-jay De La Fuente\nJohn Homer Sayno Dar\n\n<b>Mobile Application Developers</b>\nHyrum Roi Sapurco Bravo\nJasper Daile Tuibeo Corpuz\n\n<b>Lead Researchers</b>\nKirby Ann Aycardo De Los Reyes\nWendee Davillo Postre\n\n<b>Special Thanks To:</b>\nTeam Koinu\nThe Institute of Computer Studies\nCamarines Norte State College\nand\nProfessor Marc Lester Acunin</string>
+    <string name="logo">logo</string>
+    <string name="app">Feed and Find:</string>
+    <string name="open">open</string>
+    <string name="close">close</string>
+
+    //Navigation
+    <string name="strDashboard">Dashboard</string>
+    <string name="strCredits">Credits</string>
+    <string name="strAbout">About</string>
+    <string name="strStatistics">Statistics</string>
+    <string name="strOther">Other</string>
+    <string name="strFeeder">Feeder</string>
+    <string name="strSetting">Settings</string>
+    <string name="strLogout">Log out</string>
+    <string name="navigation_header">navigation header</string>
+    <string name="my_app">My App</string>
+    <string name="addbtn_descrip">Add Pet</string>
+
+    //Info
+    <string name="profile_information">Profile Information:</string>
+    <string name="name">Name:</string>
+    <string name="breed">Breed:</string>
+    <string name="age">Age:</string>
+    <string name="sex">Sex:</string>
+    <string name="birthdate">Birthdate:</string>
+    <string name="weight">Weight:</string>
+    <string name="health_information">Health Information:</string>
+    <string name="allergies">Allergies:</string>
+    <string name="treats">Treats:</string>
+    <string name="restrictions">Restrictions:</string>
+    <string name="medications">Medications:</string>
+    <string name="vet_name">Vet Name:</string>
+    <string name="contact_information">Contact Information:</string>
+    <string name="physical_address">Physical Address:</string>
+    <string name="contact_number">Contact Number:</string>
+    <string name="email_address">Email Address:</string>
+
+    <string name="password">Password</string>
+    <string name="add_pet">Add Pet</string>
+    <string name="address">Address:</string>
+    <string name="birthday_label">Birthday:</string>
+    <string name="personal_information">Personal Information</string>
+    <string name="pet_name">Pet Name</string>
+    <string name="pet_type_and_breed">Pet Type and Breed</string>
+    <string name="birthday">Birthday</string>
+    <string name="sex_input">Sex</string>
+    <string name="birthday_input">Birthday</string>
+    <string name="pet_name_label">Pet Name:</string>
+    <string name="pet_type_and_breed_label">Pet Type and Breed:</string>
+    <string name="birthday_text">Birthday:</string>
+    <string name="pet_informationLabel">Pet Information</string>
+    <string name="contact_informationLabel">Contact Information</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <string name="health_informationLabel">Health Information</string>
+    <string name="vet_contact">Vet Contact:</string>
+    <string name="cancelBtn">CANCEL</string>
+    <string name="submitBtn">SUBMIT</string>
+    <string name="deviceNum">Device ID: 0001</string>
+    <string name="updateBtn">UPDATE</string>
+    <string name="strTrash">Trash</string>
+    <string name="strLocation">Location</string>
+    <string name="strPet_profile">Pet Profile</string>
+    <string name="show_location">Show Location</string>
+    <string name="location">Location</string>
+    <string name="radar">Radar</string>
+    <string name="username">Username</string>
+    <string name="date_format">MM/DD/YYYY</string>
+    <string name="strSearch">Search</string>
+    <string name="strDelete_all">Delete Al</string>
+    <string name="strSort">Sort</string>
+    <string name="StrDelete_all_records">Delete All Records</string>
+    <string name="finder">Finder</string>
+    <string name="feed">Feed</string>
+    <string name="select_date">select date</string>
+    <string name="select_time">select time</string>
+    <string name="lvl1">Lvl1</string>
+    <string name="lvl2">Lvl2</string>
+    <string name="lvl3">Lvl3</string>
+    <string name="lvl4">Lvl4</string>
+    <string name="lvl5">Lvl5</string>
+    <string name="lvl6">Lvl6</string>
+    <string name="upload">Upload</string>
+</resources>
