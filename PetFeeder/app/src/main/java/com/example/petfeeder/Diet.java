@@ -22,7 +22,7 @@ import android.widget.RadioButton;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.example.petfeeder.Bluetooth.Bluetooth;
+import com.example.petfeeder.Bluetooth.ConnectBT;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -65,8 +65,8 @@ public class Diet extends AppCompatActivity {
         setContentView(R.layout.activity_diet);
 
         Intent intent = getIntent();
-        if (intent != null && intent.hasExtra(Bluetooth.EXTRA_ADDRESS)) {
-            address = intent.getStringExtra(Bluetooth.EXTRA_ADDRESS);
+        if (intent != null && intent.hasExtra(ScanBluetooth.EXTRA_ADDRESS)) {
+            address = intent.getStringExtra(ScanBluetooth.EXTRA_ADDRESS);
             if (address == null || address.isEmpty()) {
                 // Handle the case when the Bluetooth address is empty
                 Toast.makeText(Diet.this, "Invalid Bluetooth address", Toast.LENGTH_SHORT).show();
@@ -80,9 +80,6 @@ public class Diet extends AppCompatActivity {
             return;
         }
         //receive the address of the bluetooth device
-
-
-
         date_pick = findViewById(R.id.date_pick);
         time_pick = findViewById(R.id.time_pick);
         btn_lvl_1 = findViewById(R.id.lvl_1);
@@ -97,7 +94,6 @@ public class Diet extends AppCompatActivity {
         datePicker = findViewById(R.id.date_pick);
         timePicker = findViewById(R.id.time_pick);
         selectDate();
-        new ConnectBT().execute(); //Call the class to connect
 
         timePicker.setOnClickListener(v -> selectTime());
 
@@ -239,53 +235,6 @@ public class Diet extends AppCompatActivity {
         }, hour, minut, true);
         timePickerDialog.setTitle("Select Time");
         timePickerDialog.show();
-    }
-    private class ConnectBT extends AsyncTask<Void, Void, Void> implements com.example.petfeeder.Bluetooth.ConnectBT {
-        private boolean ConnectSuccess = true; //if it's here, it's almost connected
-
-        @Override
-        protected void onPreExecute() {
-            custom_progress = ProgressDialog.show(Diet.this, "Connecting...", "Please wait!!!");  //show a progress dialog
-        }
-
-        @Override
-        protected Void doInBackground(Void... devices) //while the progress dialog is shown, the connection is done in background
-        {
-            try {
-                if (btSocket == null || !isBtConnected) {
-                    myBluetooth = BluetoothAdapter.getDefaultAdapter();//get the mobile bluetooth device
-                    BluetoothDevice dispositivo = myBluetooth.getRemoteDevice(address);
-                    if (ActivityCompat.checkSelfPermission(Diet.this, android.Manifest.permission.BLUETOOTH_ADMIN) != PackageManager.PERMISSION_GRANTED) {
-                        ActivityCompat.requestPermissions(Diet.this, new String[]{Manifest.permission.BLUETOOTH_ADMIN}, PERMISSION_REQUEST_CODE);
-
-                        return null;
-                    }
-                    btSocket = dispositivo.createInsecureRfcommSocketToServiceRecord(myUUID);//create a RFCOMM (SPP) connection
-                    BluetoothAdapter.getDefaultAdapter().cancelDiscovery();
-                    btSocket.connect();//start connection
-                    outputStream = btSocket.getOutputStream();
-                }
-            } catch (IOException e) {
-                ConnectSuccess = false;
-                e.printStackTrace();//if the try failed, you can check the exception here
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) //after the doInBackground, it checks if everything went fine
-        {
-            super.onPostExecute(result);
-            custom_progress.dismiss();
-
-            if (!ConnectSuccess) {
-                msg("Connection Failed. Is it a SPP Bluetooth? Try again.");
-                finish();
-            } else {
-                msg("Connected.");
-                isBtConnected = true;
-            }
-        }
     }
     private void msg(String s) {
         Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();

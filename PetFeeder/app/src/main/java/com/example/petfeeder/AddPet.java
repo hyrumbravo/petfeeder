@@ -10,11 +10,15 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -40,12 +44,15 @@ public class AddPet extends AppCompatActivity {
 
     ContentResolver contentResolver;
 
+    boolean doubleBackToExitPressedOnce = false;
+
     TextInputEditText pname, pbreed, pweight, bdate, ageEditText;
     RadioGroup psex;
     RadioButton radioButton;
     CircularImageView picture;
     private Uri imagePath;
     DatabaseHelper databaseHelper;
+    Button savePet;
 
     private static final int CAMERA_REQUEST_CODE = 100;
     private static final int STORAGE_REQUEST_CODE = 101;
@@ -69,9 +76,12 @@ public class AddPet extends AppCompatActivity {
         bdate = findViewById(R.id.editBdate);
         ageEditText = findViewById(R.id.EditAge);
         picture = findViewById(R.id.petPic);
+        savePet = findViewById(R.id.save_pet);
         databaseHelper = new DatabaseHelper(this);
         cameraPermissions = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
         storagePermissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
+
+        imagePath = null;
 
         Toolbar myToolbar = findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
@@ -100,6 +110,16 @@ public class AddPet extends AppCompatActivity {
                 choseImage();
             }
         });
+        savePet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Long Id = storeData();
+                Intent intent = new Intent(AddPet.this, DisplayPetDetails.class);
+                intent.putExtra("RECORD_ID", String.valueOf(Id));
+                startActivity(intent);
+                finish();
+            }
+        });
 
     }
 
@@ -108,17 +128,6 @@ public class AddPet extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.add_menu, menu);
         return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.save) {
-            storeData();
-            startActivity(new Intent(AddPet.this, Dashboard.class));
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     private void showDatePickerDialog() {
@@ -287,7 +296,7 @@ public class AddPet extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void storeData(){
+    private Long storeData(){
         int selectedSexId = psex.getCheckedRadioButtonId();
         radioButton = findViewById(selectedSexId);
         sex = radioButton.getText().toString().trim();
@@ -310,5 +319,25 @@ public class AddPet extends AppCompatActivity {
                 ""+timestamp,
                 ""+timestamp);
         Toast.makeText(this, "Record Added against Id: "+id, Toast.LENGTH_SHORT).show();
+        return id;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            return;
+        }
+
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "Click again to go back.", Toast.LENGTH_SHORT).show();
+
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce=false;
+            }
+        }, 2000);
     }
 }

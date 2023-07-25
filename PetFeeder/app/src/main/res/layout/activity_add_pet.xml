@@ -18,8 +18,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:navigationIcon="@drawable/ic_arrow_back"
         app:title="Add Pet"
-        app:titleTextColor="@color/white"
-        app:menu="@menu/add_menu"/>
+        app:titleTextColor="@color/white"/>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -197,9 +196,14 @@
                     android:inputType="number" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <View
+            <Button
+                android:id="@+id/save_pet"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"/>
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:backgroundTint="@color/purple"
+                android:text="@string/add_pet"
+                android:textAllCaps="false" />
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

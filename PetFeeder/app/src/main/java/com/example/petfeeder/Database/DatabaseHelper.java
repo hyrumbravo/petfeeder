@@ -150,9 +150,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @SuppressLint("Range")
     public PetModel getRecordDetails(String recordID) {
-        String selectQuery = "SELECT * FROM " + Constants.TABLE_NAME + " WHERE " + Constants.COLUMN_ID + "=\"" + recordID + "\"";
+        if (recordID == null) return new PetModel();
+        String selectQuery = "SELECT * FROM " + Constants.TABLE_NAME + " WHERE " + Constants.COLUMN_ID + "= ?";
         SQLiteDatabase db = getWritableDatabase();
-        Cursor cursor = db.rawQuery(selectQuery, null);
+        Cursor cursor = db.rawQuery(selectQuery, new String[]{recordID});
         PetModel petModel = new PetModel();
 
         if (cursor.moveToFirst()) {
@@ -177,7 +178,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             } while (cursor.moveToNext());
         }
         db.close();
-
         return petModel;
     }
 

@@ -3,17 +3,21 @@ package com.example.petfeeder.Application;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Application;
+import android.bluetooth.BluetoothGatt;
+import android.bluetooth.BluetoothGattCharacteristic;
 import android.content.ContentResolver;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDelegate;
 
+import com.example.petfeeder.Bluetooth.BluetoothGattCallbackHandler;
 import com.example.petfeeder.Database.Constants;
 import com.example.petfeeder.DataSharing.PetProviderConstants;
 import com.example.petfeeder.Database.DatabaseHelper;
@@ -24,6 +28,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class PetFeeder extends Application implements Application.ActivityLifecycleCallbacks{
 
@@ -40,6 +45,8 @@ public class PetFeeder extends Application implements Application.ActivityLifecy
     Boolean contentProviderExists = false;
     Boolean previousContentProviderExists = false;
 
+    RepeatSend repeatSend;
+
     ArrayList<RecordModel> unlistedPets;
 
     @Override
@@ -47,6 +54,8 @@ public class PetFeeder extends Application implements Application.ActivityLifecy
         super.onCreate();
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         instance = this;
+
+        repeatSend = new RepeatSend();
 
         databaseHelper = new DatabaseHelper(this);
         unlistedPets = new ArrayList<>();
@@ -134,6 +143,15 @@ public class PetFeeder extends Application implements Application.ActivityLifecy
     }
     public int getDrawerNavID() {
         return drawerNavID;
+    }
+
+    public RepeatSend getRepeatSend(BluetoothGattCallbackHandler bluetoothGattCallbackHandler,
+                                    BluetoothGatt bluetoothGatt,
+                                    BluetoothGattCharacteristic characteristic) {
+        repeatSend.setBluetoothGattCallbackHandler(bluetoothGattCallbackHandler);
+        repeatSend.setBluetoothGatt(bluetoothGatt);
+        repeatSend.setCharacteristic(characteristic);
+        return repeatSend;
     }
 
     //DATA SETTERS
@@ -247,4 +265,107 @@ public class PetFeeder extends Application implements Application.ActivityLifecy
 
     @Override
     public void onActivityDestroyed(@NonNull Activity activity) {}
+
+    public static class RepeatSend implements BluetoothGattCallbackHandler.CharacteristicWriteCallback{
+
+        static List<String> value;
+        static Boolean running = false, waiting = false, success;
+        Integer sentMessage;
+
+        BluetoothGattCallbackHandler bluetoothGattCallbackHandler;
+        BluetoothGatt bluetoothGatt;
+        BluetoothGattCharacteristic characteristic;
+
+        private Thread thread;
+
+        public RepeatSend() {
+            value = new ArrayList<>();
+        }
+
+        public void setBluetoothGattCallbackHandler(BluetoothGattCallbackHandler bluetoothGattCallbackHandler) {
+            this.bluetoothGattCallbackHandler = bluetoothGattCallbackHandler;
+        }
+
+        public void setBluetoothGatt(BluetoothGatt bluetoothGatt) {
+            this.bluetoothGatt = bluetoothGatt;
+        }
+
+        public void setCharacteristic(BluetoothGattCharacteristic characteristic) {
+            this.characteristic = characteristic;
+        }
+
+        public int startSending(){
+            if (value.size() == 0) return -1;
+            if (running) return -2;
+            running = true;
+            Runnable runnable = new Runnable() {
+                @Override
+                public void run() {
+                    sendData();
+                }
+            };
+            thread = new Thread(runnable);
+            thread.start();
+            return 1;
+        }
+
+        public void stopSending(){
+            running = false;
+            success = null;
+            Log.d("DEBUGGER", "Value: "+value.toString());
+            if (value.size() == 0) return;
+            value.remove(0);
+            if (value.size() > 0) startSending();
+        }
+
+        public void emptyList(){
+            value.clear();
+        }
+
+        public String currentString(){
+            return value.get(0);
+        }
+
+        public RepeatSend addString(String message){
+            value.add(message);
+            Log.d("DEBUGGER", "Value: "+value.toString());
+            return this;
+        }
+
+        @org.jetbrains.annotations.Nullable
+        public Boolean successStatus(){ return success; }
+
+        @SuppressLint("MissingPermission")
+        private void sendData(){
+
+            bluetoothGattCallbackHandler.setCharacteristicWriteCallback(this);
+
+            if (bluetoothGatt != null && characteristic != null) {
+                String message = value.get(0);
+                characteristic.setValue(message + "\n");
+                Log.d("DEBUGGER", message);
+                sentMessage = 0;
+                while (running) {
+                    while (waiting);
+                    success = bluetoothGatt.writeCharacteristic(characteristic);
+                    if (success) {
+                        waiting = true;
+                        try {
+                            Thread.sleep(200); // Sleep for 200 milliseconds
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    sentMessage ++;
+                    if (!running) break;
+                }
+                waiting = false;
+            }
+        }
+
+        @Override
+        public void onCharacteristicWrite(Boolean writeOperationStatus) {
+            waiting = false;
+        }
+    }
 }

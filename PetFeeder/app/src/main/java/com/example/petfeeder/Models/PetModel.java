@@ -10,6 +10,10 @@ public class PetModel {
     Integer Age, Weight, ID;
     List<String> Allergies, Medications;
 
+    public PetModel() {
+        Image = "null";
+    }
+
     public void nullify(){
         ID = null;
         Name = null;
@@ -18,7 +22,7 @@ public class PetModel {
         Birthdate = null;
         VetName = null;
         VetContact = null;
-        Image = null;
+        Image = "null";
         Age = null;
         Weight = null;
         Allergies = null;

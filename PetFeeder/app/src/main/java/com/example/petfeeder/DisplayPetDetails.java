@@ -67,8 +67,6 @@ public class DisplayPetDetails extends AppCompatActivity {
                 }
         );
 
-
-
         petProfile = findViewById(R.id.petImage);
         petNameDisplay = findViewById(R.id.petNameDisplay);
         petBreedDisplay = findViewById(R.id.petBreedDisplay);
@@ -122,8 +120,8 @@ public class DisplayPetDetails extends AppCompatActivity {
         petBreedDisplay.setText(petModel.getBreed());
         petSexDisplay.setText(petModel.getSex());
         petBdateDisplay.setText(petModel.getBirthdate());
-        petAgeDisplay.setText(petModel.getAge()+" y/o");
-        petWeightDisplay.setText(petModel.getWeight()+" Kg");
+        petAgeDisplay.setText((petModel.getAge()!=null?petModel.getAge():0)+" y/o");
+        petWeightDisplay.setText((petModel.getWeight()!=null?petModel.getWeight():0)+" Kg");
         PetFeeder.getInstance().setPetModel(petModel);
     }
 }
