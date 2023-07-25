@@ -8,10 +8,6 @@
             android:id="@+id/nav_dashboard"
             android:icon="@drawable/ic_dashboard"
             android:title="@string/strDashboard"/>
-        <item
-            android:id="@+id/nav_trash"
-            android:icon="@drawable/ic_trash"
-            android:title="@string/strTrash"/>
 
     </group>
 
@@ -19,13 +15,13 @@
         <menu>
             <group android:checkableBehavior="single">
                 <item
-                    android:id="@+id/nav_feeder"
-                    android:icon="@drawable/ic_feeder"
-                    android:title="@string/finder"/>
+                    android:id="@+id/nav_about"
+                    android:icon="@drawable/ic_about"
+                    android:title="@string/strAbout"/>
                 <item
-                    android:id="@+id/nav_settings"
-                    android:icon="@drawable/ic_settings"
-                    android:title="@string/strSetting"/>
+                    android:id="@+id/nav_credits"
+                    android:icon="@drawable/ic_credits"
+                    android:title="@string/strCredits"/>
             </group>
         </menu>
     </item>

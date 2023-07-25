@@ -1,10 +1,13 @@
-package com.example.petfeeder;
+package com.example.petfeeder.SplashScreen;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.petfeeder.Components.Dashboard;
+import com.example.petfeeder.R;
 
 import java.util.Timer;
 import java.util.TimerTask;

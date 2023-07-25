@@ -2,9 +2,6 @@ package com.example.petfeeder;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,6 +15,8 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.blogspot.atifsoftwares.circularimageview.CircularImageView;
 import com.example.petfeeder.Application.PetFeeder;
+import com.example.petfeeder.Database.DatabaseHelper;
+import com.example.petfeeder.Models.PetModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 

@@ -6,13 +6,12 @@ import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.net.Uri;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.petfeeder.Constants;
-import com.example.petfeeder.DatabaseHelper;
+import com.example.petfeeder.Database.Constants;
+import com.example.petfeeder.Database.DatabaseHelper;
 
 public class PetFeederContentProvider extends ContentProvider {
     public static final String AUTHORITY = "com.example.petfeeder";

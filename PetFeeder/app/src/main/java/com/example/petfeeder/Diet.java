@@ -22,6 +22,7 @@ import android.widget.RadioButton;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.example.petfeeder.Bluetooth.Bluetooth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -239,7 +240,7 @@ public class Diet extends AppCompatActivity {
         timePickerDialog.setTitle("Select Time");
         timePickerDialog.show();
     }
-    private class ConnectBT extends AsyncTask<Void, Void, Void> implements com.example.petfeeder.ConnectBT {
+    private class ConnectBT extends AsyncTask<Void, Void, Void> implements com.example.petfeeder.Bluetooth.ConnectBT {
         private boolean ConnectSuccess = true; //if it's here, it's almost connected
 
         @Override

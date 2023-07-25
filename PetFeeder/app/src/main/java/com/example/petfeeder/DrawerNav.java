@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -13,6 +12,10 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.example.petfeeder.Application.PetFeeder;
+import com.example.petfeeder.Components.About;
+import com.example.petfeeder.Components.Credits;
+import com.example.petfeeder.Components.Dashboard;
 import com.google.android.material.navigation.NavigationView;
 
 public class DrawerNav extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
@@ -44,19 +47,25 @@ public class DrawerNav extends AppCompatActivity implements NavigationView.OnNav
         switch (menuItem.getItemId()){
 
             case R.id.nav_dashboard:
-                startActivity(new Intent(DrawerNav.this, Dashboard.class));
+                if (PetFeeder.getInstance().getDrawerNavID() != 0) {
+                    startActivity(new Intent(DrawerNav.this, Dashboard.class));
+                    PetFeeder.getInstance().setDrawerNavID(0);
+                }
                 break;
 
-            case R.id.nav_settings:
-                startActivity(new Intent(DrawerNav.this, Settings.class));
+            case R.id.nav_about:
+                if (PetFeeder.getInstance().getDrawerNavID() != 1) {
+                    startActivity(new Intent(DrawerNav.this, About.class));
+                    PetFeeder.getInstance().setDrawerNavID(1);
+                }
                 break;
 
-            case R.id.nav_feeder:
-                Toast.makeText(DrawerNav.this, "Feeder", Toast.LENGTH_SHORT).show();
+            case R.id.nav_credits:
+                if (PetFeeder.getInstance().getDrawerNavID() != 2) {
+                    startActivity(new Intent(DrawerNav.this, Credits.class));
+                    PetFeeder.getInstance().setDrawerNavID(2);
+                }
                 break;
-
-            default:
-                return true;
         }
         return true;
     }

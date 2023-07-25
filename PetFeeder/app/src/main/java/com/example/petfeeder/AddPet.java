@@ -28,6 +28,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.blogspot.atifsoftwares.circularimageview.CircularImageView;
+import com.example.petfeeder.Components.Dashboard;
+import com.example.petfeeder.Database.DatabaseHelper;
 import com.google.android.material.textfield.TextInputEditText;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;

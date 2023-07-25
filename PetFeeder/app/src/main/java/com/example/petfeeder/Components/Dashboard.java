@@ -1,4 +1,4 @@
-package com.example.petfeeder;
+package com.example.petfeeder.Components;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -12,11 +12,14 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.petfeeder.Adapters.RecordAdapter;
+import com.example.petfeeder.AddPet;
 import com.example.petfeeder.Application.PetFeeder;
-import com.example.petfeeder.DataSharing.PetProviderConstants;
+import com.example.petfeeder.Database.Constants;
+import com.example.petfeeder.Database.DatabaseHelper;
+import com.example.petfeeder.DrawerNav;
+import com.example.petfeeder.R;
 import com.example.petfeeder.databinding.ActivityDashboardBinding;
-
-import java.util.ArrayList;
 
 public class Dashboard extends DrawerNav {
 

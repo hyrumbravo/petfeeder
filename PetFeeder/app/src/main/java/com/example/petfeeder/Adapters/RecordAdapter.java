@@ -1,4 +1,4 @@
-package com.example.petfeeder;
+package com.example.petfeeder.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +13,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.petfeeder.Database.DatabaseHelper;
+import com.example.petfeeder.DisplayPetDetails;
+import com.example.petfeeder.R;
+import com.example.petfeeder.Models.RecordModel;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,4 @@
-package com.example.petfeeder;
+package com.example.petfeeder.Models;
 
 public class RecordModel {
     String id, name, breed, sex, age, weight, image, addedtime, updatedtime, petFinderID;

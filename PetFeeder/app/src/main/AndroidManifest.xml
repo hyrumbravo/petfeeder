@@ -36,13 +36,13 @@
             android:name=".feed"
             android:exported="false" />
         <activity
-            android:name=".Bluetooth"
+            android:name=".Bluetooth.Bluetooth"
             android:exported="false" />
         <activity
             android:name=".statistics"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".SplashScreen.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -54,28 +54,22 @@
             android:name=".DisplayPetDetails"
             android:exported="false" />
         <activity
-            android:name=".UserInfo"
-            android:exported="false" />
-        <activity
             android:name=".EditPet"
             android:exported="false" />
         <activity
-            android:name=".Credits"
+            android:name=".Components.Credits"
             android:exported="false" />
         <activity
-            android:name=".About"
+            android:name=".Components.About"
             android:exported="false" />
         <activity
             android:name=".AddPet"
             android:exported="false" />
         <activity
-            android:name=".Settings"
-            android:exported="false" />
-        <activity
             android:name=".DrawerNav"
             android:exported="false" />
         <activity
-            android:name=".Dashboard"
+            android:name=".Components.Dashboard"
             android:exported="false" />
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"

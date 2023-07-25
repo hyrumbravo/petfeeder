@@ -1,4 +1,4 @@
-package com.example.petfeeder;
+package com.example.petfeeder.Database;
 
 import android.annotation.SuppressLint;
 import android.content.ContentUris;
@@ -9,7 +9,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
-import android.util.Log;
+
+import com.example.petfeeder.Models.PetModel;
+import com.example.petfeeder.Models.RecordModel;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -18,7 +20,7 @@ import java.util.ArrayList;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     public static final String AUTHORITY = "com.example.petfeeder";
-    public static final Uri CONTENT_URI = Uri.parse("content://"+AUTHORITY+"/"+Constants.TABLE_NAME);
+    public static final Uri CONTENT_URI = Uri.parse("content://"+AUTHORITY+"/"+ Constants.TABLE_NAME);
 
     private static final int PETS = 1;
 

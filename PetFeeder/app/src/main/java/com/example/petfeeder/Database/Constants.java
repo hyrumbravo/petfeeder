@@ -1,4 +1,4 @@
-package com.example.petfeeder;
+package com.example.petfeeder.Database;
 
 public class Constants {
 

@@ -1,4 +1,4 @@
-package com.example.petfeeder;
+package com.example.petfeeder.Models;
 
 import android.media.Image;
 

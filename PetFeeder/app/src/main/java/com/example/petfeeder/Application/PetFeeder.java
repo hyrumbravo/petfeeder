@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Application;
 import android.content.ContentResolver;
-import android.content.Intent;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.Uri;
@@ -15,11 +14,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDelegate;
 
-import com.example.petfeeder.Constants;
+import com.example.petfeeder.Database.Constants;
 import com.example.petfeeder.DataSharing.PetProviderConstants;
-import com.example.petfeeder.DatabaseHelper;
-import com.example.petfeeder.PetModel;
-import com.example.petfeeder.RecordModel;
+import com.example.petfeeder.Database.DatabaseHelper;
+import com.example.petfeeder.Models.PetModel;
+import com.example.petfeeder.Models.RecordModel;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -33,6 +32,8 @@ public class PetFeeder extends Application implements Application.ActivityLifecy
     ContentResolver contentResolver;
     ContentObserver contentObserver;
     DatabaseHelper databaseHelper;
+
+    private int drawerNavID = 0;
 
     PetModel petModel;
 
@@ -58,8 +59,6 @@ public class PetFeeder extends Application implements Application.ActivityLifecy
         //REGISTER THE LIFECYCLE CALLBACK. USED FOR DETECTING NEW DATA WHEN COMING BACK TO THE APP.
         registerActivityLifecycleCallbacks(this);
     }
-
-
 
     private void isContentUriExists() {
         Uri uri_pets = PetProviderConstants.CONTENT_URI_PETS;
@@ -132,6 +131,9 @@ public class PetFeeder extends Application implements Application.ActivityLifecy
     }
     public PetModel getPetModel() {
         return petModel;
+    }
+    public int getDrawerNavID() {
+        return drawerNavID;
     }
 
     //DATA SETTERS
@@ -210,6 +212,9 @@ public class PetFeeder extends Application implements Application.ActivityLifecy
     }
     public void setPetModel(PetModel petModel) {
         this.petModel = petModel;
+    }
+    public void setDrawerNavID(int drawerNavID) {
+        this.drawerNavID = drawerNavID;
     }
 
     //APPLICATION LIFECYCLE IMPLEMENTATIONS

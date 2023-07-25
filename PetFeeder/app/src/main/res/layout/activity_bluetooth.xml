@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:gravity="center_horizontal"
     android:background="@drawable/yellow_background"
-    tools:context=".Bluetooth">
+    tools:context=".Bluetooth.Bluetooth">
 
 
 

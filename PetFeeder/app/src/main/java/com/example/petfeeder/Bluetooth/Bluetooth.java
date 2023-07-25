@@ -1,4 +1,4 @@
-package com.example.petfeeder;
+package com.example.petfeeder.Bluetooth;
 
 import android.Manifest;
 
@@ -13,7 +13,6 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -23,7 +22,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.IOException;
+import com.example.petfeeder.Diet;
+import com.example.petfeeder.R;
+
 import java.util.ArrayList;
 import java.util.Set;
 import java.util.UUID;
