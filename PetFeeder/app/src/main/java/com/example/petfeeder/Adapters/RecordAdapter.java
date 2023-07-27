@@ -111,7 +111,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.RecordHold
 
         ContentValues values = new ContentValues();
 
-        values.put(Constants.COLUMN_ID, model.getPetFinderID());
+        values.put(Constants.COLUMN_ID, id);
         values.put(Constants.COLUMN_PETNAME, model.getName());
         values.put(Constants.COLUMN_BREED, model.getBreed());
         values.put(Constants.COLUMN_SEX, model.getSex());
@@ -121,7 +121,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.RecordHold
         values.put(Constants.COLUMN_IMAGE, model.getImage());
         values.put(Constants.COLUMN_ADDED_TIMESTAMP, model.getAddedtime());
         values.put(Constants.COLUMN_UPDATED_TIMESTAMP, timestamp);
-        values.put(Constants.COLUMN_PET_FINDER_ID, id);
+        values.put(Constants.COLUMN_PET_FINDER_ID, model.getPetFinderID());
 
         PetFeeder.getInstance().getContentResolver().update(PetProviderConstants.CONTENT_URI_PETS, values, null, null);
         return id;
