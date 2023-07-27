@@ -13,11 +13,11 @@ import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.petfeeder.Adapters.RecordAdapter;
-import com.example.petfeeder.AddPet;
+import com.example.petfeeder.Pages.AddPet;
 import com.example.petfeeder.Application.PetFeeder;
 import com.example.petfeeder.Database.Constants;
 import com.example.petfeeder.Database.DatabaseHelper;
-import com.example.petfeeder.DrawerNav;
+import com.example.petfeeder.Adapters.DrawerNav;
 import com.example.petfeeder.R;
 import com.example.petfeeder.databinding.ActivityDashboardBinding;
 

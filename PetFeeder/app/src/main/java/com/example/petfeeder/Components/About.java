@@ -2,7 +2,7 @@ package com.example.petfeeder.Components;
 
 import android.os.Bundle;
 
-import com.example.petfeeder.DrawerNav;
+import com.example.petfeeder.Adapters.DrawerNav;
 import com.example.petfeeder.R;
 import com.example.petfeeder.databinding.ActivityAboutBinding;
 

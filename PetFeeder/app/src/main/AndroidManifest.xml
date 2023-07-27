@@ -31,16 +31,7 @@
         android:theme="@style/Theme.PetFeeder"
         tools:targetApi="31">
         <activity
-            android:name=".non_diet"
-            android:exported="false" />
-        <activity
-            android:name=".Diet"
-            android:exported="false" />
-        <activity
-            android:name=".feed"
-            android:exported="false" />
-        <activity
-            android:name=".statistics"
+            android:name=".Pages.Diet"
             android:exported="false" />
         <activity
             android:name=".SplashScreen.MainActivity"
@@ -52,13 +43,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".DisplayPetDetails"
+            android:name=".Pages.DisplayPetDetails"
             android:exported="false" />
         <activity
-            android:name=".EditPet"
+            android:name=".Pages.EditPet"
             android:exported="false" />
         <activity
-            android:name=".ScanBluetooth"
+            android:name=".Pages.ScanBluetooth"
             android:exported="false" />
         <activity
             android:name=".Components.Credits"
@@ -67,10 +58,10 @@
             android:name=".Components.About"
             android:exported="false" />
         <activity
-            android:name=".AddPet"
+            android:name=".Pages.AddPet"
             android:exported="false" />
         <activity
-            android:name=".DrawerNav"
+            android:name=".Adapters.DrawerNav"
             android:exported="false" />
         <activity
             android:name=".Components.Dashboard"

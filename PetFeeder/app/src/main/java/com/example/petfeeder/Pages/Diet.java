@@ -1,18 +1,12 @@
-package com.example.petfeeder;
+package com.example.petfeeder.Pages;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 
-import android.Manifest;
 import android.app.DatePickerDialog;
-import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -22,19 +16,19 @@ import android.widget.RadioButton;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.example.petfeeder.Bluetooth.ConnectBT;
+import com.example.petfeeder.Adapters.Data;
+import com.example.petfeeder.Application.PetFeeder;
+import com.example.petfeeder.Bluetooth.BluetoothObject;
+import com.example.petfeeder.R;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.IOException;
-import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
-import java.util.UUID;
 
 public class Diet extends AppCompatActivity {
 
@@ -45,17 +39,9 @@ public class Diet extends AppCompatActivity {
     EditText time_pick;
     RadioButton btn_lvl_1, btn_lvl_2, btn_lvl_3, btn_lvl_4, btn_lvl_5, btn_lvl_6;
     Button upload;
-    private BluetoothAdapter myBluetooth = BluetoothAdapter.getDefaultAdapter();
     String address = null;
-    private ProgressDialog custom_progress;
     private BluetoothAdapter bluetoothAdapter;
-    private OutputStream outputStream;
-    private BluetoothDevice device;
     BluetoothSocket btSocket = null;
-    private boolean isBtConnected = false;
-    public static final int PERMISSION_REQUEST_CODE = 1;
-    //SPP UUID. Look for it
-    static final UUID myUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
     DatabaseReference feedRef;
 
@@ -64,9 +50,8 @@ public class Diet extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_diet);
 
-        Intent intent = getIntent();
-        if (intent != null && intent.hasExtra(ScanBluetooth.EXTRA_ADDRESS)) {
-            address = intent.getStringExtra(ScanBluetooth.EXTRA_ADDRESS);
+        if (BluetoothObject.getInstance()!=null) {
+            address = BluetoothObject.getInstance().getBluetoothDevice().getAddress();
             if (address == null || address.isEmpty()) {
                 // Handle the case when the Bluetooth address is empty
                 Toast.makeText(Diet.this, "Invalid Bluetooth address", Toast.LENGTH_SHORT).show();
@@ -100,7 +85,7 @@ public class Diet extends AppCompatActivity {
         upload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                uploadData(view);//ito binago ko 5:20
+                uploadData(view);
             }
 
         });
@@ -119,18 +104,17 @@ public class Diet extends AppCompatActivity {
         Toast.makeText(Diet.this, "Data uploaded", Toast.LENGTH_SHORT).show();
 
         if (date.isEmpty()) {
-            Toast.makeText(Diet.this, "Please enter text", Toast.LENGTH_SHORT).show();
+            Toast.makeText(Diet.this, "Please enter valid date!", Toast.LENGTH_SHORT).show();
             return;
         }
         if (time.isEmpty()) {
-            Toast.makeText(Diet.this, "Please enter text", Toast.LENGTH_SHORT).show();
+            Toast.makeText(Diet.this, "Please enter valid time!", Toast.LENGTH_SHORT).show();
             return;
         }
         if (!bluetoothAdapter.isEnabled()) {
-            Toast.makeText(Diet.this, "Bluetooth is not enabled", Toast.LENGTH_SHORT).show();
+            Toast.makeText(Diet.this, "You got disconnected to the Pet Feeder device. Please reconnect first!", Toast.LENGTH_SHORT).show();
+            finish();
             return;
-
-            //Bluetooth Upload..
         }
         SimpleDateFormat myformat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         SimpleDateFormat mytime = new SimpleDateFormat("HH:mm:ss", Locale.US);
@@ -147,48 +131,37 @@ public class Diet extends AppCompatActivity {
             String text = formattedDate + " " + formattedTime;
 
             // Send the data via Bluetooth
-            sendTextToBluetooth(text);
+            BluetoothObject.getInstance().sendData(text);
         } catch (ParseException e) {
             e.printStackTrace();
             Toast.makeText(Diet.this, "Error parsing date or time", Toast.LENGTH_SHORT).show();
             return;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
         // Check if a specific RadioButton is selected
         String text = null;
-        //ito binago ko 5:20
-        if (btn_lvl_1.isChecked()) {
-            // Send text for RadioButton 1
-            text = "Level 1";
-        } else if (btn_lvl_2.isChecked()) {
-            // Send text for RadioButton 2
-            text = "Level 2";
-        } else if (btn_lvl_3.isChecked()) {
-            // Send text for RadioButton 3
-            text = "Level 3";
-        } else if (btn_lvl_4.isChecked()) {
-            // Send text for RadioButton 4
-            text = "Level 4";
-        } else if (btn_lvl_5.isChecked()) {
-            // Send text for RadioButton 5
-            text = "Level 5";
-        } else if (btn_lvl_6.isChecked()) {
-            // Send text for RadioButton 6
-            text = "Level 6";
-        }
+        if (btn_lvl_1.isChecked())      text = "Level 1";
+        else if (btn_lvl_2.isChecked()) text = "Level 2";
+        else if (btn_lvl_3.isChecked()) text = "Level 3";
+        else if (btn_lvl_4.isChecked()) text = "Level 4";
+        else if (btn_lvl_5.isChecked()) text = "Level 5";
+        else if (btn_lvl_6.isChecked()) text = "Level 6";
+
         if (text != null){
-            sendTextToBluetooth(text);
+            try {
+                BluetoothObject.getInstance().sendData(text);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
             Toast.makeText(Diet.this, "Data Uploaded successfully", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(this, DisplayPetDetails.class);
+            intent.putExtra("RECORD_ID", PetFeeder.getInstance().getPetModel().getID());
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            startActivity(intent);
+            finish();
         }else{
             Toast.makeText(Diet.this, "Please select Level", Toast.LENGTH_SHORT).show();
-        }
-    }
-    private void sendTextToBluetooth(String text) {
-        try {
-            OutputStream outputStream = btSocket.getOutputStream();
-            outputStream.write(text.getBytes(StandardCharsets.UTF_8));
-        } catch (IOException e) {
-            e.printStackTrace();
-            Toast.makeText(Diet.this, "Error sending data via Bluetooth", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -235,8 +208,5 @@ public class Diet extends AppCompatActivity {
         }, hour, minut, true);
         timePickerDialog.setTitle("Select Time");
         timePickerDialog.show();
-    }
-    private void msg(String s) {
-        Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
     }
 }

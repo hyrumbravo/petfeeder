@@ -1,4 +1,4 @@
-package com.example.petfeeder;
+package com.example.petfeeder.Adapters;
 
 import android.content.Intent;
 import android.view.MenuItem;
@@ -16,6 +16,7 @@ import com.example.petfeeder.Application.PetFeeder;
 import com.example.petfeeder.Components.About;
 import com.example.petfeeder.Components.Credits;
 import com.example.petfeeder.Components.Dashboard;
+import com.example.petfeeder.R;
 import com.google.android.material.navigation.NavigationView;
 
 public class DrawerNav extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{

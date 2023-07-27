@@ -12,25 +12,24 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.petfeeder.Database.DatabaseHelper;
 import com.example.petfeeder.R;
-import com.example.petfeeder.ScanBluetooth;
+import com.example.petfeeder.Pages.ScanBluetooth.DeviceObject;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ScanBTListViewAdapter extends RecyclerView.Adapter<ScanBTListViewAdapter.ScanBTListViewHolder> {
 
     private Context context;
-    private List<ScanBluetooth.ScannedDevices> DeviceScanList;
+    private List<DeviceObject> DeviceScanList;
     private OnItemClickListener clickListener;
-    DatabaseHelper databaseHelper;
+    private DatabaseHelper databaseHelper;
 
-    public ScanBTListViewAdapter(Context context, List<ScanBluetooth.ScannedDevices> DeviceScanList) {
+    public ScanBTListViewAdapter(Context context, List<DeviceObject> DeviceScanList) {
         this.context = context;
         this.DeviceScanList = DeviceScanList;
     }
 
     public interface OnItemClickListener {
-        void onItemClick(int position);
+        void onItemClick(DeviceObject deviceObject);
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
@@ -46,12 +45,13 @@ public class ScanBTListViewAdapter extends RecyclerView.Adapter<ScanBTListViewAd
 
     @Override
     public void onBindViewHolder(@NonNull ScanBTListViewHolder holder, int position) {
-        if (DeviceScanList.get(position).getDeviceName() != null) {
-            holder.BluetoothName.setText(DeviceScanList.get(position).getDeviceName());
+        boolean isPaired = DeviceScanList.get(position).getPaired();
+        if (DeviceScanList.get(position).getName() != null) {
+            holder.BluetoothName.setText(DeviceScanList.get(position).getName());
         } else {
-            holder.BluetoothName.setText("Bluetooth Device");
+            holder.BluetoothName.setText("Bluetooth Device" + (isPaired? "":" (Unpaired)"));
         }
-        holder.MACAddress.setText(DeviceScanList.get(position).getMACAddress());
+        holder.MACAddress.setText(DeviceScanList.get(position).getMacAddress());
         holder.Indicator.setBackgroundColor(context.getResources().getColor(R.color.lightGray));
     }
 
@@ -75,7 +75,7 @@ public class ScanBTListViewAdapter extends RecyclerView.Adapter<ScanBTListViewAd
                 int position = getAdapterPosition();
                 if (position != RecyclerView.NO_POSITION) {
                     if (clickListener != null) {
-                        clickListener.onItemClick(position);
+                        clickListener.onItemClick(DeviceScanList.get(position));
                     }
                 }
             });

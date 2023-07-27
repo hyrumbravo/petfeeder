@@ -9,9 +9,5 @@
             android:id="@+id/nav_feed"
             android:icon="@drawable/ic_cookie_24"
             android:title="@string/feed"/>
-        <item
-            android:id="@+id/nav_statistics"
-            android:icon="@drawable/ic_statistics"
-            android:title="@string/strStatistics"/>
     </group>
 </menu>

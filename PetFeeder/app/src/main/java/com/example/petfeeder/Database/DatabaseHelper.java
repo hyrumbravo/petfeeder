@@ -126,6 +126,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
         return id;
     }
+    public long storeData(String petName, String breed, String sex, String bdate, String age,
+                          String weight, String petPic, String addedtime, String updatedtime, String petFinderId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(Constants.COLUMN_PETNAME, petName);
+        values.put(Constants.COLUMN_BREED, breed);
+        values.put(Constants.COLUMN_SEX, sex);
+        values.put(Constants.COLUMN_BIRTHDATE, bdate);
+        values.put(Constants.COLUMN_AGE, age);
+        values.put(Constants.COLUMN_WEIGHT, weight);
+        values.put(Constants.COLUMN_IMAGE, petPic);
+        values.put(Constants.COLUMN_ADDED_TIMESTAMP, addedtime);
+        values.put(Constants.COLUMN_UPDATED_TIMESTAMP, updatedtime);
+        values.put(Constants.COLUMN_PET_FINDER_ID, petFinderId);
+
+        long id = db.insert(Constants.TABLE_NAME, null, values);  // Corrected table name usage
+        db.close();
+        return id;
+    }
 
     public int updateData(Integer id, String petName, String breed, String sex, String bdate, String age,
                           String weight, String petPic, String addedtime, String updatedtime, String petFinderID) {

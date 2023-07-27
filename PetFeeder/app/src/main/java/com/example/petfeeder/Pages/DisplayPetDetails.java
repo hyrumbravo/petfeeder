@@ -1,4 +1,4 @@
-package com.example.petfeeder;
+package com.example.petfeeder.Pages;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -17,6 +17,7 @@ import com.blogspot.atifsoftwares.circularimageview.CircularImageView;
 import com.example.petfeeder.Application.PetFeeder;
 import com.example.petfeeder.Database.DatabaseHelper;
 import com.example.petfeeder.Models.PetModel;
+import com.example.petfeeder.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 
@@ -56,10 +57,8 @@ public class DisplayPetDetails extends AppCompatActivity {
                             case R.id.nav_petProfile:
                                 break;
                             case R.id.nav_feed:
-                                Intent intent = new Intent(DisplayPetDetails.this, feed.class);
+                                Intent intent = new Intent(DisplayPetDetails.this, ScanBluetooth.class);
                                 startActivity(intent);
-                                break;
-                            case R.id.nav_statistics:
                                 break;
                         }
                         return false;

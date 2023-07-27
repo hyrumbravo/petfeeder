@@ -1,4 +1,4 @@
-package com.example.petfeeder;
+package com.example.petfeeder.Pages;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -10,15 +10,11 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -32,56 +28,84 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.blogspot.atifsoftwares.circularimageview.CircularImageView;
-import com.example.petfeeder.Components.Dashboard;
+import com.example.petfeeder.Application.PetFeeder;
 import com.example.petfeeder.Database.DatabaseHelper;
+import com.example.petfeeder.Models.PetModel;
+import com.example.petfeeder.R;
 import com.google.android.material.textfield.TextInputEditText;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.util.Calendar;
 
-public class AddPet extends AppCompatActivity {
+public class EditPet extends AppCompatActivity {
 
     ContentResolver contentResolver;
+    TextInputEditText petName, petBreed, petWeight, bdate, ageEditText, allergies, treats, med, vetName,vetNum;
 
-    boolean doubleBackToExitPressedOnce = false;
-
-    TextInputEditText pname, pbreed, pweight, bdate, ageEditText;
     RadioGroup psex;
     RadioButton radioButton;
     CircularImageView picture;
     private Uri imagePath;
     DatabaseHelper databaseHelper;
-    Button savePet;
-
     private static final int CAMERA_REQUEST_CODE = 100;
     private static final int STORAGE_REQUEST_CODE = 101;
     private static final int IMAGE_PICK_CAMERA_CODE = 102;
     private static final int IMAGE_PICK_GALLERY_CODE = 103;
     private String[] cameraPermissions;
     private String[] storagePermissions;
-
-    private  String petName, breed, sex, birthdate, age, weight;
+    private Uri imageUri;
+    private String pname, breed, sex, birthdate, addedTime, updatedTime, PFDD;
+    private Integer id, age, weight;
+    private boolean isEditMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_pet);
+        setContentView(R.layout.activity_edit_pet);
 
         contentResolver = getContentResolver();
-        pname = findViewById(R.id.petName);
-        pbreed = findViewById(R.id.breed);
+        petName = findViewById(R.id.editPetName);
+        petBreed = findViewById(R.id.editBreed);
         psex = findViewById(R.id.sexRB);
-        pweight = findViewById(R.id.weight);
+        petWeight = findViewById(R.id.editWeight);
         bdate = findViewById(R.id.editBdate);
         ageEditText = findViewById(R.id.EditAge);
-        picture = findViewById(R.id.petPic);
-        savePet = findViewById(R.id.save_pet);
+        picture = findViewById(R.id.editPetPic);
+        allergies = findViewById(R.id.allergies);
+        treats = findViewById(R.id.treats);
+        med = findViewById(R.id.medication);
+        vetName = findViewById(R.id.vetName);
+        vetNum = findViewById(R.id.vetContact);
         databaseHelper = new DatabaseHelper(this);
         cameraPermissions = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
         storagePermissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
-        imagePath = null;
+        PetModel petModel = PetFeeder.getInstance().getPetModel();
+        id = petModel.getID();
+        pname = petModel.getName();
+        breed = petModel.getBreed();
+        sex = petModel.getSex();
+        birthdate = petModel.getBirthdate();
+        age = petModel.getAge();
+        weight = petModel.getWeight();
+        imageUri = Uri.parse(petModel.getImage());
+        petName.setText(pname);
+        petBreed.setText(breed);
+        // Set the selected radio button based on the sex
+        if (sex.equals("Male")) {
+            psex.check(R.id.maleRB);
+        } else if (sex.equals("Female")) {
+            psex.check(R.id.femaleRB);
+        }
+        bdate.setText(birthdate);
+        ageEditText.setText(String.valueOf(age));
+        petWeight.setText(String.valueOf(weight));
+        if (imageUri.equals("null")) {
+            picture.setImageResource(R.drawable.profile);
+        } else {
+            picture.setImageURI(imageUri);
+        }
 
         Toolbar myToolbar = findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
@@ -97,7 +121,7 @@ public class AddPet extends AppCompatActivity {
             }
         });
 
-        bdate.setOnClickListener(new View.OnClickListener() {
+        bdate.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showDatePickerDialog();
@@ -110,24 +134,29 @@ public class AddPet extends AppCompatActivity {
                 choseImage();
             }
         });
-        savePet.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Long Id = storeData();
-                Intent intent = new Intent(AddPet.this, DisplayPetDetails.class);
-                intent.putExtra("RECORD_ID", String.valueOf(Id));
-                startActivity(intent);
-                finish();
-            }
-        });
-
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.add_menu, menu);
+        inflater.inflate(R.menu.update_menu, menu);
         return true;
+    }
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.updatePet) {
+            storeData();
+            Intent intent = new Intent(EditPet.this, DisplayPetDetails.class);
+            intent.putExtra("RECORD_ID", String.valueOf(this.id));
+            startActivity(intent);
+            finish();
+            return true;
+        }
+        else if (id ==R.id.deletePet){
+            databaseHelper.deleteData(String.valueOf(this.id));
+            onResume();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void showDatePickerDialog() {
@@ -148,16 +177,13 @@ public class AddPet extends AppCompatActivity {
                         int currentYear = currentDate.get(Calendar.YEAR);
                         int currentMonth = currentDate.get(Calendar.MONTH) + 1; // Months are zero-based
                         int currentDayOfMonth = currentDate.get(Calendar.DAY_OF_MONTH);
-
                         int selectedYear = year;
                         int selectedMonth = month + 1; // Months are zero-based
                         int selectedDayOfMonth = dayOfMonth;
-
                         int age = currentYear - selectedYear;
                         if (currentMonth < selectedMonth || (currentMonth == selectedMonth && currentDayOfMonth < selectedDayOfMonth)) {
                             age--; // Not yet reached the birthdate in the current year
                         }
-
                         // Display age
                         ageEditText.setText(String.valueOf(age));
                     }
@@ -296,48 +322,33 @@ public class AddPet extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    private Long storeData(){
-        int selectedSexId = psex.getCheckedRadioButtonId();
-        radioButton = findViewById(selectedSexId);
-        sex = radioButton.getText().toString().trim();
-        petName = ""+pname.getText().toString().trim();
-        breed = ""+pbreed.getText().toString().trim();
-        sex = ""+radioButton.getText().toString().trim();
-        birthdate = ""+bdate.getText().toString().trim();
-        age = ""+ageEditText.getText().toString().trim();
-        weight = ""+pweight.getText().toString().trim();
+    private void storeData(){
+        int selectID = psex.getCheckedRadioButtonId();
+        radioButton = findViewById(selectID);
+        if (selectID ==1){
+            Toast.makeText(this, "Select Sex", Toast.LENGTH_SHORT).show();
+        } else {
+            radioButton.getText();
+        }
+        String petNameText = petName.getText().toString().trim();
+        breed = ""+petBreed.getText().toString().trim();
+        sex = ""+radioButton.getText().toString().trim();  // Update this line
+        birthdate = bdate.getText().toString().trim();
+        age = Integer.parseInt(ageEditText.getText().toString().trim().replaceAll("[^\\d]", ""));
+        weight = Integer.valueOf(petWeight.getText().toString().trim());
 
         String timestamp = ""+System.currentTimeMillis();
-        long id = databaseHelper.storeData(
-                ""+petName,
+        databaseHelper.updateData(
+                id,
+                ""+petNameText,
                 ""+breed,
                 ""+sex,
                 ""+birthdate,
                 ""+age,
                 ""+weight,
-                ""+imagePath,
+                ""+imageUri,
+                ""+addedTime,
                 ""+timestamp,
-                ""+timestamp);
-        Toast.makeText(this, "Record Added against Id: "+id, Toast.LENGTH_SHORT).show();
-        return id;
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (doubleBackToExitPressedOnce) {
-            super.onBackPressed();
-            return;
-        }
-
-        this.doubleBackToExitPressedOnce = true;
-        Toast.makeText(this, "Click again to go back.", Toast.LENGTH_SHORT).show();
-
-        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-
-            @Override
-            public void run() {
-                doubleBackToExitPressedOnce=false;
-            }
-        }, 2000);
+                ""+PFDD);
     }
 }
