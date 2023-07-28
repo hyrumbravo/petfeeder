@@ -2,13 +2,14 @@ package com.example.petfeeder.Models;
 
 import android.media.Image;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.List;
 
 public class PetModel {
 
-    String Name, Breed, Sex, Birthdate, VetName, VetContact, Image, PetFinderID;
+    String Name, Breed, Sex, Birthdate, VetName, VetContact, Image, PetFinderID, Allergies, Medications;
     Integer Age, Weight, ID;
-    List<String> Allergies, Medications;
 
     public PetModel() {
         Image = "null";
@@ -73,14 +74,14 @@ public class PetModel {
     }
 
     public String getVetName() {
-        return VetName;
+        return alterReturn(VetName);
     }
     public void setVetName(String vetName) {
         VetName = vetName;
     }
 
     public String getVetContact() {
-        return VetContact;
+        return alterReturn(VetContact);
     }
     public void setVetContact(String vetContact) {
         VetContact = vetContact;
@@ -100,17 +101,17 @@ public class PetModel {
         Weight = weight;
     }
 
-    public List<String> getAllergies() {
-        return Allergies;
+    public String getAllergies() {
+        return alterReturn(Allergies);
     }
-    public void setAllergies(List<String> allergies) {
+    public void setAllergies(String allergies) {
         Allergies = allergies;
     }
 
-    public List<String> getMedications() {
-        return Medications;
+    public String getMedications() {
+        return alterReturn(Medications);
     }
-    public void setMedications(List<String> medications) {
+    public void setMedications(String medications) {
         Medications = medications;
     }
 
@@ -121,4 +122,7 @@ public class PetModel {
         petFinderID = petFinderID;
     }
 
+    private String alterReturn(@Nullable String value){
+        return value==null?"":value=="null"?"":value;
+    }
 }

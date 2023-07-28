@@ -1,10 +1,8 @@
 package com.example.petfeeder.Database;
 
 import android.annotation.SuppressLint;
-import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -106,7 +104,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return id;
     }
     public int updateData(Integer id, String petName, String breed, String sex, String bdate, String age,
-                          String weight, String petPic, String addedtime, String updatedtime, String petFinderID) {
+                          String weight, String petPic, String updatedtime, String petFinderID, String allergies,
+                          String medications, String vetName, String vetContact) {
+        if (petName == null || breed == null || sex == null || bdate == null || age == null || weight == null || petPic == null || updatedtime == null || petFinderID == null ) return -1;
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -117,36 +117,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(Constants.COLUMN_AGE, age);
         values.put(Constants.COLUMN_WEIGHT, weight);
         values.put(Constants.COLUMN_IMAGE, petPic);
-        values.put(Constants.COLUMN_ADDED_TIMESTAMP, addedtime);
         values.put(Constants.COLUMN_UPDATED_TIMESTAMP, updatedtime);
         values.put(Constants.COLUMN_PET_FINDER_ID, petFinderID);
 
         int returnValue = db.update(Constants.TABLE_NAME, values, Constants.COLUMN_ID +" = ?", new String[] {String.valueOf(id)});
+        updateHealthInfo(id, allergies, medications, vetName, vetContact);
         db.close();
         return returnValue;
     }
-    public long updateHealthInfo(String btAddress, String Allergies, String Medications, String VetName, String VetContact) {
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        ContentValues values = new ContentValues();
-        values.put(Constants.COLUMN_ID, btAddress); // Use Bluetooth address as ID
-        values.put(Constants.COLUMN_ALLERGIES, Allergies);
-        values.put(Constants.COLUMN_MEDICATIONS, Medications);
-        values.put(Constants.COLUMN_VETNAME, VetName);
-        values.put(Constants.COLUMN_VETCONTACT, VetContact);
-
-        long returnValue =
-                db.update(Constants.TABLE_NAME3, values, Constants.COLUMN_ID +" = ?", new String[] {btAddress});
-
-        if (returnValue==0){
-            //if update affected no lines, it means pet has no health information stored yet.
-            returnValue = db.insertWithOnConflict(Constants.TABLE_NAME3, null, values, SQLiteDatabase.CONFLICT_IGNORE);
-        }
-
-        db.close();
-        return returnValue;
-    }
-
     public PetModel getRecordDetails(String recordID) {
         if (recordID == null) return new PetModel();
         String selectQuery = "SELECT * FROM " + Constants.TABLE_NAME + " WHERE " + Constants.COLUMN_ID + "= ?";
@@ -175,8 +153,46 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         ""+cursor.getString(cursor.getColumnIndex(Constants.COLUMN_PET_FINDER_ID)));
             } while (cursor.moveToNext());
         }
+        selectQuery = "SELECT * FROM " + Constants.TABLE_NAME3 + " WHERE " + Constants.COLUMN_ID + "=\"" + recordID + "\"";
+        cursor = db.rawQuery(selectQuery, null);
+        if (cursor.getCount()>0) {
+            if (cursor.moveToFirst()) {
+                petModel.setAllergies(
+                        "" + cursor.getString(cursor.getColumnIndex(Constants.COLUMN_ALLERGIES)));
+                petModel.setMedications(
+                        "" + cursor.getString(cursor.getColumnIndex(Constants.COLUMN_MEDICATIONS)));
+                petModel.setVetName(
+                        "" + cursor.getString(cursor.getColumnIndex(Constants.COLUMN_VETNAME)));
+                petModel.setVetContact(
+                        cursor.getString(cursor.getColumnIndex(Constants.COLUMN_VETCONTACT)));
+            }
+        }
+        db.close();
         db.close();
         return petModel;
+    }
+
+    private long updateHealthInfo(Integer Id, String Allergies, String Medications, String VetName, String VetContact) {
+        if (Allergies == null || Medications == null || VetName == null || VetContact == null) return 0;
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(Constants.COLUMN_ID, Id); // Use Bluetooth address as ID
+        values.put(Constants.COLUMN_ALLERGIES, Allergies);
+        values.put(Constants.COLUMN_MEDICATIONS, Medications);
+        values.put(Constants.COLUMN_VETNAME, VetName);
+        values.put(Constants.COLUMN_VETCONTACT, VetContact);
+
+        long returnValue =
+                db.update(Constants.TABLE_NAME3, values, Constants.COLUMN_ID +" = ?", new String[] {String.valueOf(Id)});
+
+        if (returnValue==0){
+            //if update affected no lines, it means pet has no health information stored yet.
+            returnValue = db.insertWithOnConflict(Constants.TABLE_NAME3, null, values, SQLiteDatabase.CONFLICT_IGNORE);
+        }
+
+        db.close();
+        return returnValue;
     }
 
     public Cursor getAllPets () {

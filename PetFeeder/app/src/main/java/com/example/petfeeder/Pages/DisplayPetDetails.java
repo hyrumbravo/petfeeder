@@ -1,8 +1,11 @@
 package com.example.petfeeder.Pages;
 
 import android.annotation.SuppressLint;
+import android.bluetooth.BluetoothGatt;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -20,14 +23,14 @@ import com.example.petfeeder.Models.PetModel;
 import com.example.petfeeder.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.util.Objects;
+
 
 public class DisplayPetDetails extends AppCompatActivity {
 
-    BottomNavigationView navigationView;
-    Toolbar pet_toolbar;
-
     private CircularImageView petProfile;
-    private TextView petNameDisplay, petBreedDisplay, petSexDisplay, petBdateDisplay, petAgeDisplay, petWeightDisplay;
+    private TextView petName, petBreed, petSex, date, petWeight, age_textview,
+            petAllergiesDisplay, petMedDisplay, petVetDisplay, petContactDisplay;
     private String recordID;
     private DatabaseHelper dbhelper;
 
@@ -36,7 +39,19 @@ public class DisplayPetDetails extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_pet_details);
 
-        pet_toolbar = findViewById(R.id.pet_toolbar);
+        petProfile = findViewById(R.id.petImage);
+        petName = findViewById(R.id.petNameDisplay);
+        petBreed = findViewById(R.id.petBreedDisplay);
+        petSex = findViewById(R.id.petSexDisplay);
+        date = findViewById(R.id.petBdateDisplay);
+        petWeight = findViewById(R.id.petWeightDisplay);
+        age_textview = findViewById(R.id.petAgeDisplay);
+        petAllergiesDisplay = findViewById(R.id.petAllergiesDisplay);
+        petMedDisplay = findViewById(R.id.petMedDisplay);
+        petVetDisplay = findViewById(R.id.petVetDisplay);
+        petContactDisplay = findViewById(R.id.vetContactDisplay);
+
+        Toolbar pet_toolbar = findViewById(R.id.pet_toolbar);
 
         pet_toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,9 +61,9 @@ public class DisplayPetDetails extends AppCompatActivity {
             }
         });
 
-        navigationView = findViewById(R.id.bottomNav);
+        BottomNavigationView bottomNav = findViewById(R.id.bottomNav);
 
-        navigationView.setOnNavigationItemSelectedListener(
+        bottomNav.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -65,14 +80,6 @@ public class DisplayPetDetails extends AppCompatActivity {
                     }
                 }
         );
-
-        petProfile = findViewById(R.id.petImage);
-        petNameDisplay = findViewById(R.id.petNameDisplay);
-        petBreedDisplay = findViewById(R.id.petBreedDisplay);
-        petSexDisplay = findViewById(R.id.petSexDisplay);
-        petBdateDisplay = findViewById(R.id.petBdateDisplay);
-        petAgeDisplay = findViewById(R.id.petAgeDisplay);
-        petWeightDisplay = findViewById(R.id.petWeightDisplay);
 
         Intent intent = getIntent();
         recordID = intent.getStringExtra("RECORD_ID");
@@ -105,22 +112,32 @@ public class DisplayPetDetails extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.editPet) {
-            startActivity(new Intent(DisplayPetDetails.this, EditPet.class));
+            Intent intent = new Intent(DisplayPetDetails.this, EditPet.class);
+            intent.putExtra("RECORD_ID", recordID);
+            startActivity(intent);
+            finish();
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressLint({"Range", "SetTextI18n"})
     private void showRecordDetails() {
-        DatabaseHelper databaseHelper = new DatabaseHelper(this);
-        PetModel petModel = databaseHelper.getRecordDetails(recordID);
-        petNameDisplay.setText(petModel.getName());
-        petBreedDisplay.setText(petModel.getBreed());
-        petSexDisplay.setText(petModel.getSex());
-        petBdateDisplay.setText(petModel.getBirthdate());
-        petAgeDisplay.setText((petModel.getAge()!=null?petModel.getAge():0)+" y/o");
-        petWeightDisplay.setText((petModel.getWeight()!=null?petModel.getWeight():0)+" Kg");
+        PetModel petModel = dbhelper.getRecordDetails(recordID);
         PetFeeder.getInstance().setPetModel(petModel);
+
+        String image = petModel.getImage();
+        if (image.equals("null")) petProfile.setImageResource(R.drawable.profile);
+        else petProfile.setImageURI(Uri.parse(image));
+
+        petName.setText(petModel.getName());
+        petBreed.setText(petModel.getBreed());
+        petSex.setText(petModel.getSex());
+        age_textview.setText(String.format(petModel.getAge()>1?"%d Years Old":"%d Year Old", petModel.getAge()));
+        date.setText(petModel.getBirthdate());
+        petWeight.setText(String.format("%dkg", petModel.getWeight()));
+        if (!petModel.getAllergies().isEmpty() || !Objects.equals(petModel.getAllergies(), "")) petAllergiesDisplay.setText(petModel.getAllergies());
+        if (!petModel.getMedications().isEmpty() || !Objects.equals(petModel.getMedications(), "")) petMedDisplay.setText(petModel.getMedications());
+        if (!petModel.getVetName().isEmpty() || !Objects.equals(petModel.getVetName(), "")) petVetDisplay.setText(petModel.getVetName());
+        if (!petModel.getVetContact().isEmpty() || !Objects.equals(petModel.getVetContact(), "")) petContactDisplay.setText(petModel.getVetContact());
     }
 }

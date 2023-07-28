@@ -97,9 +97,12 @@ public class PetFeederContentProvider extends ContentProvider {
                 values.getAsString(Constants.COLUMN_AGE),
                 values.getAsString(Constants.COLUMN_WEIGHT),
                 values.getAsString(Constants.COLUMN_IMAGE),
-                values.getAsString(Constants.COLUMN_ADDED_TIMESTAMP),
                 values.getAsString(Constants.COLUMN_UPDATED_TIMESTAMP),
-                values.getAsString(Constants.COLUMN_PET_FINDER_ID));
+                values.getAsString(Constants.COLUMN_PET_FINDER_ID),
+                values.getAsString(Constants.COLUMN_ALLERGIES),
+                values.getAsString(Constants.COLUMN_MEDICATIONS),
+                values.getAsString(Constants.COLUMN_VETNAME),
+                values.getAsString(Constants.COLUMN_VETCONTACT));
         getContext().getContentResolver().notifyChange(uri, null);
         return returnValue;
     }

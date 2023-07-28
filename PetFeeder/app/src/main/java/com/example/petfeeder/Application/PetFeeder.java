@@ -49,6 +49,7 @@ public class PetFeeder extends Application implements Application.ActivityLifecy
 
         databaseHelper = new DatabaseHelper(this);
         unlistedPets = new ArrayList<>();
+        petModel = new PetModel();
 
         //CHECK IF CONTENT PROVIDER EXISTS BEFORE USING IT.
         //SPECIFICALLY, THIS IS DETECTING IF PET FINDER IS INSTALLED USING ITS CONTENT URI.
@@ -103,6 +104,9 @@ public class PetFeeder extends Application implements Application.ActivityLifecy
     public int getDrawerNavID() {
         return drawerNavID;
     }
+    public Boolean getContentProviderExists() {
+        return contentProviderExists;
+    }
 
     //DATA SETTERS
     @SuppressLint("Range")
@@ -111,8 +115,8 @@ public class PetFeeder extends Application implements Application.ActivityLifecy
         //GET ALL PETS WITHOUT PET FEEDER ID.
         Cursor cursor = contentResolver.query(PetProviderConstants.CONTENT_URI_PETS,
                 null,
-                Constants.COLUMN_PET_FEEDER_ID + " IS NULL",
-                null,
+                Constants.COLUMN_PET_FEEDER_ID + " IS NULL OR " + Constants.COLUMN_PET_FEEDER_ID + " = ?",
+                new String[]{"null"},
                 null,
                 null);
         unlistedPets.clear();
